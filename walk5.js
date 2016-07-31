@@ -18,15 +18,23 @@ function walk5(node, cb, matches) {
 	}
 
 	if (!(flags & FLAG_SKIP_NODE)) {
-		var childNodes = node.childNodes;
+		if (node.hasOwnProperty('childNodes')) {
+			var childNodes = node.childNodes;
 
-		if (childNodes) {
 			for (var i = 0, l = childNodes.length; i < l; i++) {
 				var result = walk5(childNodes[i], cb, matches);
 
 				if (result.interrupted) {
 					return result;
 				}
+			}
+		}
+
+		if (node.hasOwnProperty('content')) {
+			var result2 = walk5(node.content, cb, matches);
+
+			if (result2.interrupted) {
+				return result2;
 			}
 		}
 	}
